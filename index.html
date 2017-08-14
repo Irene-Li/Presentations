@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title> Matrix Product State Inspired Tensor Networks </title>
+
+		<meta name="author" content="Irene Li">
+
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/ssolarized.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2> Matrix Product State Inspired Tensor Networks </h2>
+					<p> Irene Li, Taketomo Isazawa </p>
+					<p> Supervisor: Dr Austen Lamacraft </p>
+				</section>
+
+				<section> 
+					<section data-markdown>	
+						<textarea data-template>
+
+							## The Story of Thomas the Tensor Train
+							
+							
+									     _____                            . . . . o o o o o 
+									   __|[_]|__ ___________ _______    ____      o
+									   |[] [] []| [] [] [] [] [_____(__  ][]]_n_n__][.
+									   _|________|_[_________]_[________]_|__|________)<
+									   oo    oo 'oo      oo ' oo    oo 'oo 0000---oo\_
+									 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+						</textarea>
+	
+					</section>
+
+
+					<section>
+						<h2> Matrix Product State (MPS) </h2>
+						<ul> 
+							<li class="fragment"> A quantum many-body system 
+								$$ 
+								\lvert \psi \rangle = \sum_{{s_1}{s_2}{s_3}\dots{s_n}}W_{{s_1}{s_2}{s_3}\dots{s_n}} \lvert {{s_1}{s_2}{s_3}\dots{s_n}} \rangle
+								$$
+							</li>
+							<li class="fragment"> As a matrix product state
+								$$
+								W_{{s_1}{s_2}{s_3}\dots{s_n}} \approx M^{(1)}_{{s_1}{\sigma_1}} 
+															M^{(2)}_{{s_2}{\sigma_1}{\sigma_2}} 
+															M^{(3)}_{{s_3}{\sigma_2}{\sigma_3}}
+															\dots 
+															M^{(n-1)}_{{s_{n-1}{\sigma_{n-1}}{\sigma_{n}}}}M^{(n)}_{{s_n}{\sigma_n}}
+								$$ 
+							</li>
+							<li class="fragment"> Graphical tensor notation 
+								<img class="center" height="80" data-src="images/mps.png" alt="mps">
+							</li>
+							<li class="fragment"> 
+								MPS is a way to bypass the curse of dimensionality in many body physics
+							</li>
+						</ul>
+
+						<aside class="notes">
+							- e.g. the $s_n$ could be spins and in fact we will commonly refer to the spin chain example from now on <br>
+							- MPS captures the interaction between the spins along the chain. 
+						</aside>
+					</section>
+
+					<section>
+						<h2> Amplitudes and probabilities </h2>
+						<ul> 
+							<li class="fragment"> In quantum mechanics
+								<br>
+								$$ P(\phi) = \vert \langle \phi \vert \psi \rangle \vert ^2 
+								\text{ with normalisation } 
+								 \langle \phi \vert \phi \rangle = 1 \text{ and } 
+								 \langle \psi \vert \psi \rangle = 1 $$ 
+							</li>
+							<li class="fragment"> E.g. overlap amplitude between a product state and an MPS for a spin chain 
+								$$ \lvert \phi \rangle = \prod_i \left ( c^{(i)}_1 \lvert \uparrow \rangle + c^{(i)}_2 \lvert \uparrow \rangle \right ) \\
+								   \langle \phi \vert \psi \rangle =  
+								   \sum_{{s_1}{s_2}{s_3}\dots{s_n}}W_{{s_1}{s_2}{s_3}\dots{s_n}}c^{(1)}_{s_1}c^{(2)}_{s_2}c^{(3)}_{s_3}\dots c^{(n)}_{s_n} $$
+
+							</li> 
+						</ul>
+						<aside class="notes">
+							Draw the tensor diagram on the board for an overlap between the product state and an MPS. <br> 
+							But then how do we normalise an MPS? 
+						</aside>
+					</section>
+
+					<section>
+						<h2> Canonical form </h2>
+						<ul> 
+							<li class="fragment"> Norm 
+								<img class="center" height="100" data-src="images/contraction.png" alt="overlap">		
+							</li>
+							<li class="fragment"> Left and right normalised matrices
+								<img class="center" height="100" data-src='images/canonical.png' alt="canonical form">
+								$$ U_{(s_j \sigma) \rho} U_{(s_j \sigma) \gamma} = \delta_{\rho \gamma} 
+								\: \text{ and } \: V_{s_j \rho \sigma} V_{s_j \gamma \sigma} = \delta_{\rho \gamma} $$
+								<br>
+							<li class="fragment"> Use singular value decomposition (svd) : $ M = USV $
+								<img class="center" height="50" data-src="images/canonical_chain.png" alt='canonical chain'>
+							</li>
+						</ul>
+						<aside class="notes">
+							- Calculating the norm is like zipping two MPSs <br>
+							- alt-click "left" to zoom in <br>
+							- Treating some indices as collective indices, then U and V are left/right-orthogonal <br>
+							- SVD is like diagonalisation for rectangular matrices <br>
+							- SVD minimises L2 distance between two matrices 
+							- Draw on the board to explain how to use svd to bring a chain into canonical form 
+						</aside>
+					</section>
+
+					<section> 
+						<h2> Modified MPS for Supervised Classification </h2> 
+						<ul>
+							<li class="fragment"> 
+							Lay the input data along the chain <br>
+							<img class="center"
+								 height="80" 
+								 data-src="images/classification.png" 
+								 alt="classification">
+							$$ f^l = W^l_{{s_1}{s_2}{s_3}\dots{s_n}} x^{(1)}_{s_1} x^{(2)}_{s_2} x^{(3)}_{s_3}
+																		\dots x^{(n)}_{s_n} 
+							$$
+	 						Want $f$ to be one-hot vector: $[0, 0, 0 \dots 1 \dots 0]$ <br>
+							</li>
+							<li class="fragment"> 
+							Represent $W$ by a modified MPS 
+							<br>
+							<img class="center"
+								 height="80"
+							 	 data-src="images/classification_approx.png"
+							 	 alt="classification approximation">
+
+
+							$$ W^l_{{s_1}{s_2}{s_3}\dots{s_n}} \approx M^{(1)}_{{s_1}{\sigma_1}} 
+															M^{(2)}_{{s_2}{\sigma_1}{\sigma_2}} 
+															M^{(3)}_{{s_3}{\sigma_2}{\sigma_3}}
+															\dots 
+															M^{(k)}_{{s_k}{\sigma_k}{\sigma_{k+1}}} 
+															\dots
+															M^{(n-1)}_{{s_{n-1}{\sigma_{n-1}}{\sigma_{n}}}}M^{(n)}_{{s_n}{\sigma_n}} $$ 
+								
+							</li>
+						</ul>
+						<aside class="notes">
+							- MPS is linear along each tensor leg -> having input as a long vector not useful!  <br> 
+							- One hot vector: one for the right category and zero otherwise <br>
+							- Can think of the output and the input collectively as some product state <br> 
+							- In some sense we are calculating the overlap between that product state and the MPS <br> 
+					</section>
+				</section>	
+				<section>
+					<section>
+						<h2> Preprocessing the input data </h2>
+						<ul> 
+							<li> Recall <a href="#/1/2"> the normalisation requirement </a>
+							<li class="fragment"> Categorical data (e.g. character) $\rightarrow$ one-hot vector </li>
+							<li class="fragment"> Real number in a range (e.g. MNIST handwritten digits) 
+								<ul> 
+									<li> Option 1: $\left[\cos(\pi x/2), sin(\pi x/2)\right]$ </li>
+									<li> Option 2: $\left[1, x\right]$ </li>
+									<li> Option 3: $\left[\exp(i3\pi x/3)cos(\pi x/2), \exp(-i3\pi x/2)sin(\pi x/2)\right]$ </li>
+								</ul>
+								</li>
+							<li class="fragment"> Real number ? </li>
+						</ul>
+						<aside class="notes"> 
+						- Categorical data, essentially binary data, properly normalised <br> 
+						- This is what is done in a paper by SS, not probabilistic, due to the nature of the input data (think about how the overlap changes as you rotate one by $\pi$) <br> 
+						- Good for taking advantage of linear regression, but again ruins the probabilistic interpretation <br> 
+						- Finally normalised! But it also forces us to use complex parameters <br>
+						- For real number not limited to a range, need activation functions! But this is quite uncommon anyway.. 
+						</aside>
+					</section>
+				</section>
+				<section> 
+					<section>
+						<h2> How to train a tensor train? </h2>
+						<ul>
+							<li> Stochastic Gradient Descent </li>
+							<li> Density Matrix Renormalisation Group (DMRG) <br> 
+									(Single-site and double-site)
+								</li>
+							<li> The Rounding Method </li>
+						</ul>
+						<aside class="notes">
+							- SGD: take element-wise gradient and apply the change <br> 
+							- DMRG: Nevermind what those words mean.. We will talk about this in details next. It takes 1 or 2 matrices at a time and optimise them <br>
+							- In its original paper it is called Riemannian Optimisation, but here we'll call it the Rounding method to highlight the difference. It takes gradient wrt the whole MPS and then add the gradient on directly with some rounding so the size doesn't grow. <br> 
+						</aside>
+					</section>
+
+					<section> 
+						<h2> DMRG </h2>
+						<p> </p>
+					</section>
+					<section> 
+						<h2> The Rounding Method </h2>
+
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				controls: true,
+				progress: true, 
+				history: true,
+				overview: true,
+				loop: false,
+				center: true, 
+				
+				fragments: true,
+				keyboard: true,
+				transition: 'slide',
+
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
