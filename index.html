@@ -32,8 +32,8 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
-					<h2> Matrix Product State Inspired Tensor Train: </h2>
-					<h3> Using Quantum Mechanics for Machine Learning </h3>
+					<h2> Matrix Product State Inspired Tensor Train </h2>
+					<h3> [ Using Quantum Mechanics for Machine Learning ] </h3>
 					<p> Irene Li, Taketomo Isazawa </p>
 					<p> Supervisor: Dr Austen Lamacraft </p>
 
@@ -47,6 +47,8 @@
 					<ol>
 						<li> Stoudenmire, E. Miles, and David J. Schwab. "Supervised learning with quantum-inspired tensor networks." (2016) </li>
 						<li> Novikov, Alexander, Mikhail Trofimov, and Ivan Oseledets. "Exponential machines." (2016) </li>
+						<li> Schollwöck, Ulrich. "The density-matrix renormalization group in the age of matrix product states." Annals of Physics 326.1 (2011): 96-192. </li>
+						<li> Orús, Román. "A practical introduction to tensor networks: Matrix product states and projected entangled pair states." Annals of Physics 349 (2014): 117-158. </li>
 					</ol>
 				</section>
 
@@ -69,8 +71,20 @@
 
 					<section> 
 						<h2> Machine Learning $\rightarrow$ Quantum Physics </h2>
-						<p class="fragment"> <img height="80" data-src="images/sixsixsix.png" align="bottom" alt="6"> </p>
+						<p class="fragment"> <img height="60" data-src="images/sixsixsix.png" align="bottom" alt="6"> </p>
+						<p class="fragment"> Each pixel lives in its vector space (spin) <br> 
+							<img class="center" height="150" data-src="images/spin.png" alt="spins"> 
+							</p>
+						<p class="fragment"> But need $\mathcal{O}\left(2^{\left[\text{const} \times N_{pixels}\right]}\right)$ parameters! </p>
 
+					</section>
+
+					<section> 
+						<h2> Graphical Tensor Notation </h2>
+						<p> Vector, matrix and tensor
+						<br> <img class="center" height="150" data-src="images/graph_tensor.png" alt="tensor"> </p>
+						<p> Tensor contraction <br> 
+						<img class="center" height="150" data-src="images/tensor_contract.png" alt="contraction"> </p>
 					</section>
 
 
@@ -110,12 +124,10 @@
 						<ul> 
 							<li class="fragment"> In quantum mechanics
 								<br>
-								$$ P(\phi) = \vert \langle \phi \vert \psi \rangle \vert ^2 
-								\text{ with normalisation } 
-								 \langle \phi \vert \phi \rangle = 1 \text{ and } 
-								 \langle \psi \vert \psi \rangle = 1 $$ 
+								$$ P(\phi \vert \psi) = \vert \langle \phi \vert \psi \rangle \vert ^2 $$ 
 							</li>
-							<li class="fragment"> E.g. overlap amplitude between a product state and an MPS for a spin chain 
+							<li class="fragment"> Require $\int P(\phi(u) \vert \psi) \mathrm{d}u = 1 $ for normalised $\lvert \psi \rangle$ </li>
+							<li class="fragment"> E.g. overlap amplitude between a product state and an MPS 
 								$$ \lvert \phi \rangle = \prod_i \left ( c^{(i)}_1 \lvert \uparrow \rangle + c^{(i)}_2 \lvert \uparrow \rangle \right ) \\
 								   \langle \phi \vert \psi \rangle =  
 								   \sum_{{s_1}{s_2}{s_3}\dots{s_n}}W_{{s_1}{s_2}{s_3}\dots{s_n}}c^{(1)}_{s_1}c^{(2)}_{s_2}c^{(3)}_{s_3}\dots c^{(n)}_{s_n} $$
@@ -128,62 +140,27 @@
 						</aside>
 					</section>
 
-					<section>
-						<h2> Canonical form </h2>
-						<ul> 
-							<li class="fragment"> Norm 
-								<img class="center" height="100" data-src="images/contraction.png" alt="overlap">		
-							</li>
-							<li class="fragment"> Left and right normalised matrices
-								<img class="center" height="100" data-src='images/canonical.png' alt="canonical form">
-								$$ U_{(s_j \sigma) \rho} U_{(s_j \sigma) \gamma} = \delta_{\rho \gamma} 
-								\: \text{ and } \: V_{s_j \rho \sigma} V_{s_j \gamma \sigma} = \delta_{\rho \gamma} $$
-								<br>
-							<li class="fragment"> Use singular value decomposition (svd) : $ M = USV $
-								<img class="center" height="50" data-src="images/canonical_chain.png" alt='canonical chain'>
-							</li>
-						</ul>
-						<aside class="notes">
-							- Calculating the norm is like zipping two MPSs <br>
-							- alt-click "left" to zoom in <br>
-							- Treating some indices as collective indices, then U and V are left/right-orthogonal <br>
-							- SVD is like diagonalisation for rectangular matrices <br>
-							- SVD minimises L2 distance between two matrices 
-							- Draw on the board to explain how to use svd to bring a chain into canonical form 
-						</aside>
-					</section>
-
 					<section> 
 						<h2> Modified MPS for Supervised Classification </h2> 
 						<ul>
 							<li class="fragment"> 
 							Lay the input data along the chain <br>
 							<img class="center"
-								 height="80" 
+								 height="100" 
 								 data-src="images/classification.png" 
 								 alt="classification">
+
 							$$ f^l = W^l_{{s_1}{s_2}{s_3}\dots{s_n}} x^{(1)}_{s_1} x^{(2)}_{s_2} x^{(3)}_{s_3}
 																		\dots x^{(n)}_{s_n} 
 							$$
-	 						Want $f$ to be one-hot vector: $[0, 0, 0 \dots 1 \dots 0]$ <br>
 							</li>
 							<li class="fragment"> 
 							Represent $W$ by a modified MPS 
 							<br>
 							<img class="center"
-								 height="80"
+								 height="100"
 							 	 data-src="images/classification_approx.png"
-							 	 alt="classification approximation">
-
-
-							$$ W^l_{{s_1}{s_2}{s_3}\dots{s_n}} \approx M^{(1)}_{{s_1}{\sigma_1}} 
-															M^{(2)}_{{s_2}{\sigma_1}{\sigma_2}} 
-															M^{(3)}_{{s_3}{\sigma_2}{\sigma_3}}
-															\dots 
-															M^{(k)l}_{{s_k}{\sigma_k}{\sigma_{k+1}}} 
-															\dots
-															M^{(n-1)}_{{s_{n-1}{\sigma_{n-1}}{\sigma_{n}}}}M^{(n)}_{{s_n}{\sigma_n}} $$ 
-								
+							 	 alt="classification approximation">								
 							</li>
 						</ul>
 						<aside class="notes">
@@ -197,13 +174,13 @@
 					<section>
 						<h2> Preprocessing the input data </h2>
 						<ul> 
-							<li> Recall <a href="#/1/2"> the normalisation requirement </a>
+							<li> Recall <a href="#/2/4"> the normalisation requirement </a>
 							<li class="fragment"> Categorical data (e.g. character) $\rightarrow$ one-hot vector </li>
-							<li class="fragment"> Real number in a range (e.g. MNIST handwritten digits) 
+							<li class="fragment"> Real number in $[0, 1]$ (e.g. MNIST handwritten digits) 
 								<ul> 
-									<li> Option 1: $\left[\cos(\pi x/2), sin(\pi x/2)\right]$ </li>
-									<li> Option 2: $\left[1, \sqrt{3} (2x -1) \right]$ </li>
-									<li> Option 3: $\left[\exp(i3\pi x/3)cos(\pi x/2), \exp(-i3\pi x/2)sin(\pi x/2)\right]$ </li>
+									<li> Option 1: $\left[\cos(\pi x/2), \sin(\pi x/2)\right]$ </li>
+									<li> Option 2: $\left[1, \sqrt{3} (2x -1) \right]$ $\bigstar$  </li>
+									<li> Option 3: $\left[\exp(i3\pi x/2)\cos(\pi x/2), \exp(-i3\pi x/2)\sin(\pi x/2)\right]$ </li>
 								</ul>
 								</li>
 							<li class="fragment"> Real number ? </li>
@@ -220,29 +197,47 @@
 				<section> 
 					<section>
 						<h2> How to train a tensor train? </h2>
-						<ul>
-							<li> Stochastic Gradient Descent </li>
-							<li> Density Matrix Renormalisation Group (DMRG) <br> 
-									(Single-site and two-site)
-								</li>
-							<li> The Rounding Method </li>
-							<li> Any combination of the above </li>
-						</ul>
+						<ul> 
+							<li class="fragment"> Minimise the loss function 
+								$ L(\mathbf{f}_{\text{data}}, \mathbf{f}_{\text{guess}}) $ <br> 
+							</li>
+							<li class="fragment"> Training algorithms 
+							<ul>
+								<li> Stochastic Gradient Descent </li>
+								<li> Density Matrix Renormalisation Group (DMRG) <br> 
+										(Single-site and two-site)
+									</li>
+								<li> Riemannian Optimisation </li>
+								<li> Any combination of the above </li>
+							</ul>
+							</li>
+						</li>
 						<aside class="notes">
 							- SGD: take element-wise gradient and apply the change <br> 
-							- DMRG: Nevermind what those words mean.. We will talk about this in details next. It takes 1 or 2 matrices at a time and optimise them <br>
-							- In its original paper it is called Riemannian Optimisation, but here we'll call it the Rounding method to highlight the difference. It takes gradient wrt the whole MPS and then add the gradient on directly with some rounding so the size doesn't grow. <br> 
+							- DMRG: I am not going to spend anytime explaining what the words mean. We will talk about this in details next. It comes in two favours: one site DMRG takes gradient wrt one matrix whereas two site DMRG looks at two matrices at a time<br> 
+							- It takes gradient wrt the whole MPS and then add the gradient on directly with some rounding so the size doesn't grow. <br> 
 						</aside>
 					</section>
-
 					<section> 
-						<h2> Two-site DMRG </h2>
-						<p> <img class="center" height="300" data-src="images/drmg1.png" alt="drmg1" ></p>
+						<h2> Aside on essential tools </h2>
+						<ul> 
+						<li class="fragment"> Singular Value Decomposition (SVD) 
+							$$ M_{ij} = \sum_{k} U_{ik} S_{k} V_{kj} $$ 
+							$ M \in \mathbb{R}^{m \times n}$, $U\in \mathbb{R}^{m \times m}$, 
+							$S\in \mathbb{R}^{\text{min}(m, n)}$, $V\in \mathbb{R}^{n \times n} $ </li>
+						<li class="fragment"> Index grouping 
+							<img class="center" height="220" data-src="images/grouping.png" alt="grouping" > </li>
+						</ul>
 					</section>
 
 					<section> 
 						<h2> Two-site DMRG </h2>
-						<p> <img class="center" height="300" data-src="images/drmg2.png" alt="drmg2" ></p>
+						<p> <img class="center" height="500" data-src="images/drmg1.png" alt="drmg1" ></p>
+					</section>
+
+					<section> 
+						<h2> Two-site DMRG </h2>
+						<p> <img class="center" height="500" data-src="images/drmg2.png" alt="drmg2" ></p>
 					</section>
 
 					<section> 
@@ -254,7 +249,8 @@
 							<li> Analytic form for gradient </li>
 							<li> Fast convergence </li>
 							<li> Can capture long range correlations </li>
-							<li> Light weight model </li>
+							<li> Light-weight model </li>
+							<li> cost = $\mathcal{O}(d_{in}^3 m^3 d_{out} L N)$ </li>
 							</ul> 
 						</li>
 						<li class="fragment"> Cons 
@@ -272,13 +268,6 @@
 					</aside>
 
 					</section>
-
-
-					<section> 
-						<h2> The Rounding Method </h2>
-						<p> <img class="center" height="300" data-src="images/rounding.png" alt="rounding method"> </p>
-						<p class="fragment"> Better cost but dimensions of all matrices are kept the same </p>
-					</section>
 				</section>
 
 				<section> 
@@ -288,7 +277,6 @@
 					<li> Use Newton's method $g/h$ </li>
 					<li> Finetune the learning rate dynamically </li>
 					<li> Use cross entropy as the lost function </li>
-					<li> Dropout </li>
 					</ul> 
 
 					<aside class="notes">
@@ -354,7 +342,10 @@
 						<ul> 
 						<li class="fragment"> $P(x_1 x_2 \dots x_n) = P(x_1) P(x_2\vert x_1)
 						\dots P(x_n \vert x_1 x_2 \dots x_{n-1}) $</li>
-						<li class="fragment"> Sampling $\longleftrightarrow$ unzipping </li>
+						<li class="fragment"> Sampling $\longleftrightarrow$ unzipping <br> 
+						<img class="center" height="150" data-src="images/MPSchain1.png" alt="unzip"> 
+						<img class="center" height="150" data-src="images/MPSchain2.png" alt="unzip"> 
+						</li>
 						</ul>
 					<aside class="notes"> 
 						Draw on the board to show how to sample from MPS 
@@ -374,7 +365,47 @@
 				</section>
 				<section> 
 					<h2> Thank you! </h2>
-					<p> Visit our github repo at <a hrep = "https://github.com/TrMPS/MPS-MNIST"> https://github.com/TrMPS/MPS-MNIST </a> </p>
+					<p> See our tensorflow implementation at <br> 
+					 <a hrep = "https://github.com/TrMPS/MPS-MNIST"> https://github.com/TrMPS/MPS-MNIST </a> </p>
+				</section>
+
+				<section>
+					<section> 
+						<h2> The rejects. </h2>
+					</section>
+					<section> 
+						<h2> Canonical form </h2>
+						<ul> 
+							<li class="fragment"> Norm 
+								<img class="center" height="100" data-src="images/contraction.png" alt="overlap">		
+							</li>
+							<li class="fragment"> Left and right normalised matrices
+								<img class="center" height="100" data-src='images/canonical.png' alt="canonical form">
+								$$ U_{(s_j \sigma) \rho} U_{(s_j \sigma) \gamma} = \delta_{\rho \gamma} 
+								\: \text{ and } \: V_{s_j \rho \sigma} V_{s_j \gamma \sigma} = \delta_{\rho \gamma} $$
+								<br> </li>
+							<li class="fragment"> Use singular value decomposition (svd) : $ M = USV $
+								<img class="center" height="50" data-src="images/canonical_chain.png" alt='canonical chain'>
+							</li>
+						</ul>
+						<aside class="notes">
+							- Calculating the norm is like zipping two MPSs <br>
+							- alt-click "left" to zoom in <br>
+							- Treating some indices as collective indices, then U and V are left/right-orthogonal <br>
+							- SVD is like diagonalisation for rectangular matrices <br>
+							- SVD minimises L2 distance between two matrices 
+							- Draw on the board to explain how to use svd to bring a chain into canonical form 
+						</aside>
+					</section>
+
+
+
+					<section> 
+						<h2> The Rounding Method </h2>
+						<p> <img class="center" height="300" data-src="images/rounding.png" alt="rounding method"> </p>
+						<p class="fragment"> Better cost but dimensions of all matrices are kept the same </p>
+					</section>
+
 				</section>
 			</div>
 		</div>
