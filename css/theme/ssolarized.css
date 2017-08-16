@@ -241,7 +241,9 @@ body {
   display:block; 
   border: 0;
   box-shadow: none; 
-  margin: 15px auto; }
+  margin: 15px auto; 
+  vertical-align: bottom;
+  }
 
 .reveal a img {
   -webkit-transition: all .15s linear;

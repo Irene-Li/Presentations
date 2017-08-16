@@ -32,16 +32,29 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
-					<h2> Matrix Product State Inspired Tensor Networks </h2>
+					<h2> Matrix Product State Inspired Tensor Train: </h2>
+					<h3> Using Quantum Mechanics for Machine Learning </h3>
 					<p> Irene Li, Taketomo Isazawa </p>
 					<p> Supervisor: Dr Austen Lamacraft </p>
+
+				<aside class="notes">
+				I will be talking about a class of novel machine learning model called Tensor Train and its relation to quantum mechanics. 
+				</aside>
+				</section>
+
+				<section> 
+					<h2> Bibliography </h2>
+					<ol>
+						<li> Stoudenmire, E. Miles, and David J. Schwab. "Supervised learning with quantum-inspired tensor networks." (2016) </li>
+						<li> Novikov, Alexander, Mikhail Trofimov, and Ivan Oseledets. "Exponential machines." (2016) </li>
+					</ol>
 				</section>
 
 				<section> 
 					<section data-markdown>	
 						<textarea data-template>
 
-							## The Story of Thomas the Tensor Train
+							### The Story of Thomas the Tensor Train
 							
 							
 									     _____                            . . . . o o o o o 
@@ -51,8 +64,13 @@
 									   oo    oo 'oo      oo ' oo    oo 'oo 0000---oo\_
 									 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-						</textarea>
-	
+						</textarea>	
+					</section>
+
+					<section> 
+						<h2> Machine Learning $\rightarrow$ Quantum Physics </h2>
+						<p class="fragment"> <img height="80" data-src="images/sixsixsix.png" align="bottom" alt="6"> </p>
+
 					</section>
 
 
@@ -162,7 +180,7 @@
 															M^{(2)}_{{s_2}{\sigma_1}{\sigma_2}} 
 															M^{(3)}_{{s_3}{\sigma_2}{\sigma_3}}
 															\dots 
-															M^{(k)}_{{s_k}{\sigma_k}{\sigma_{k+1}}} 
+															M^{(k)l}_{{s_k}{\sigma_k}{\sigma_{k+1}}} 
 															\dots
 															M^{(n-1)}_{{s_{n-1}{\sigma_{n-1}}{\sigma_{n}}}}M^{(n)}_{{s_n}{\sigma_n}} $$ 
 								
@@ -184,7 +202,7 @@
 							<li class="fragment"> Real number in a range (e.g. MNIST handwritten digits) 
 								<ul> 
 									<li> Option 1: $\left[\cos(\pi x/2), sin(\pi x/2)\right]$ </li>
-									<li> Option 2: $\left[1, x\right]$ </li>
+									<li> Option 2: $\left[1, \sqrt{3} (2x -1) \right]$ </li>
 									<li> Option 3: $\left[\exp(i3\pi x/3)cos(\pi x/2), \exp(-i3\pi x/2)sin(\pi x/2)\right]$ </li>
 								</ul>
 								</li>
@@ -193,8 +211,8 @@
 						<aside class="notes"> 
 						- Categorical data, essentially binary data, properly normalised <br> 
 						- This is what is done in a paper by SS, not probabilistic, due to the nature of the input data (think about how the overlap changes as you rotate one by $\pi$) <br> 
-						- Good for taking advantage of linear regression, but again ruins the probabilistic interpretation <br> 
-						- Finally normalised! But it also forces us to use complex parameters <br>
+						- Good for taking advantage of linear regression, and properly normalised! This is the one use <br> 
+						- Normalised and look more like a spin. But it also forces us to use complex parameters <br>
 						- For real number not limited to a range, need activation functions! But this is quite uncommon anyway.. 
 						</aside>
 					</section>
@@ -205,9 +223,10 @@
 						<ul>
 							<li> Stochastic Gradient Descent </li>
 							<li> Density Matrix Renormalisation Group (DMRG) <br> 
-									(Single-site and double-site)
+									(Single-site and two-site)
 								</li>
 							<li> The Rounding Method </li>
+							<li> Any combination of the above </li>
 						</ul>
 						<aside class="notes">
 							- SGD: take element-wise gradient and apply the change <br> 
@@ -217,12 +236,145 @@
 					</section>
 
 					<section> 
-						<h2> DMRG </h2>
-						<p> </p>
+						<h2> Two-site DMRG </h2>
+						<p> <img class="center" height="300" data-src="images/drmg1.png" alt="drmg1" ></p>
 					</section>
+
+					<section> 
+						<h2> Two-site DMRG </h2>
+						<p> <img class="center" height="300" data-src="images/drmg2.png" alt="drmg2" ></p>
+					</section>
+
+					<section> 
+						<h2> Two-site DMRG pros and cons </h2>
+
+						<ul> 
+						<li class="fragment"> Pros 
+							<ul> 
+							<li> Analytic form for gradient </li>
+							<li> Fast convergence </li>
+							<li> Can capture long range correlations </li>
+							<li> Light weight model </li>
+							</ul> 
+						</li>
+						<li class="fragment"> Cons 
+							<ul> 
+							<li> cost = $\mathcal{O}(d_{in}^3 m^3 d_{out} L N)$ </li>
+							<li> Tricks for conventional neural nets not applicable <br> (e.g. momentum) </li>
+							<ul> 
+						</li>
+
+
+					<aside class="notes">
+						- As opposed to most other Machine learning algorithms <br> 
+						- Good convergence with a few thousand MNIST samples <br> 
+						- Permuted data perform as well as unpermuted (very rare among machine learning algorithms!) <br> 
+					</aside>
+
+					</section>
+
+
 					<section> 
 						<h2> The Rounding Method </h2>
+						<p> <img class="center" height="300" data-src="images/rounding.png" alt="rounding method"> </p>
+						<p class="fragment"> Better cost but dimensions of all matrices are kept the same </p>
+					</section>
+				</section>
 
+				<section> 
+					<h2> Tricks for training </h2>
+					<ul> 
+					<li> Linear regression initialisation </li>
+					<li> Use Newton's method $g/h$ </li>
+					<li> Finetune the learning rate dynamically </li>
+					<li> Use cross entropy as the lost function </li>
+					<li> Dropout </li>
+					</ul> 
+
+					<aside class="notes">
+						- For MNIST lin reg initialisation puts the accuracy at 85% to start with <br> 
+						- Approximation the hessian matrix by its diagonal elements. This is taking the advantage of the fact that we know the analytic form of gradient. Slow but improves convergence <br>
+						- Use the Armijo condition (draw on the board if there's time) <br> 
+						- The alternative is the quadratic cost - more inline with the quantum point of view. But at least from our experience cross entropy seems to perform better <br> 
+						- Randomly zeroing input data <br> 
+					</aside>
+				</section>
+
+				<section> 
+					<h2> Results for MNIST </h2>
+					<table>
+						<thead>
+							<tr>
+								<th>  </th>
+								<th>Init</th>
+								<th>Max matrix dimension</th>
+								<th>Accuracy</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td> Lin Reg</td>
+								<td> N/A </td>
+								<td> N/A </td>
+								<td> $92\%$</td>
+							</tr>
+							<tr>
+								<td> 2-site DMRG </td>
+								<td> None </td>
+								<td> 20 </td>
+								<td> </td>
+							</tr>
+							<tr> 
+								<td> 2-site DMRG </td>
+								<td> Lin Reg </td>
+								<td> 20 </td>
+								<td> <td> 
+							</tr>
+							<tr>
+								<td> 2-site DMRG </td>
+								<td> SGD </td>
+								<td> 20 </td>
+								<td> <td> 
+							</tr>
+							<tr> 
+								<td> 2-site DMRG </td>
+								<td> Lin Reg </td>
+								<td> 50 </td>
+								<td> <td> 
+							</tr>
+							<tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section> 
+					<section> 
+						<h2> Sampling with MPS </h2>
+						<p> Generate MNIST-like data given label </p>
+						<ul> 
+						<li class="fragment"> $P(x_1 x_2 \dots x_n) = P(x_1) P(x_2\vert x_1)
+						\dots P(x_n \vert x_1 x_2 \dots x_{n-1}) $</li>
+						<li class="fragment"> Sampling $\longleftrightarrow$ unzipping </li>
+						</ul>
+					<aside class="notes"> 
+						Draw on the board to show how to sample from MPS 
+					</aside>
+					</section>
+				</section>
+				<section> 
+					<h2> Prospects </h2>
+					<ul> 
+					<li> Try on more 1d datasets </li>
+					<li> Enforcing periodicity </li>
+					<li> Extend to variable length sequences </li>
+					</ul>
+				<aside class="notes"> 
+				- mention infinite DMRG is a thing 
+				</aside>
+				</section>
+				<section> 
+					<h2> Thank you! </h2>
+					<p> Visit our github repo at <a hrep = "https://github.com/TrMPS/MPS-MNIST"> https://github.com/TrMPS/MPS-MNIST </a> </p>
 				</section>
 			</div>
 		</div>
