@@ -275,7 +275,7 @@
 					<li> Linear regression initialisation </li>
 					<li> Use Newton's method $g/h$ </li>
 					<li> Finetune the learning rate dynamically </li>
-					<li> Use cross entropy as the lost function </li>
+					<li> Use cross entropy as the loss function </li>
 					</ul> 
 
 					<aside class="notes">
@@ -303,31 +303,37 @@
 								<td> Lin Reg</td>
 								<td> N/A </td>
 								<td> N/A </td>
-								<td> $92\%$</td>
+								<td> $88\%$</td>
 							</tr>
 							<tr>
 								<td> 2-site DMRG </td>
 								<td> None </td>
 								<td> 20 </td>
-								<td> </td>
+								<td> $90\%$ </td>
 							</tr>
 							<tr> 
 								<td> 2-site DMRG </td>
 								<td> Lin Reg </td>
 								<td> 20 </td>
-								<td> <td> 
+								<td> $90\%$ </td> 
 							</tr>
-							<tr>
+							<tr> 
 								<td> 2-site DMRG </td>
-								<td> SGD </td>
-								<td> 20 </td>
-								<td> <td> 
+								<td> Lin Reg </td>
+								<td> 60 </td>
+								<td> $96\%$</td> 
 							</tr>
 							<tr> 
 								<td> 2-site DMRG </td>
 								<td> Lin Reg </td>
 								<td> 50 </td>
-								<td> <td> 
+								<td> $96\%$</td>
+							</tr>
+							<tr> 
+								<td> Stoudenmire $\&$ Schwab </td>
+								<td> None </td>
+								<td> 20 </td>
+								<td> $99\%$ </td>
 							</tr>
 							<tr>
 						</tbody>
