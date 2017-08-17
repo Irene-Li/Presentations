@@ -127,10 +127,8 @@
 								$$ P(\phi \vert \psi) = \vert \langle \phi \vert \psi \rangle \vert ^2 $$ 
 							</li>
 							<li class="fragment"> Require $\int P(\phi(u) \vert \psi) \mathrm{d}u = 1 $ for normalised $\lvert \psi \rangle$ </li>
-							<li class="fragment"> E.g. overlap amplitude between a product state and an MPS 
-								$$ \lvert \phi \rangle = \prod_i \left ( c^{(i)}_1 \lvert \uparrow \rangle + c^{(i)}_2 \lvert \uparrow \rangle \right ) \\
-								   \langle \phi \vert \psi \rangle =  
-								   \sum_{{s_1}{s_2}{s_3}\dots{s_n}}W_{{s_1}{s_2}{s_3}\dots{s_n}}c^{(1)}_{s_1}c^{(2)}_{s_2}c^{(3)}_{s_3}\dots c^{(n)}_{s_n} $$
+							<li class="fragment"> E.g. overlap amplitude between a product state and an MPS <br>
+									<img class="center" height="100" data-src="images/mps_with_inputs.png" alt="mps with inputs">
 
 							</li> 
 						</ul>
@@ -153,6 +151,7 @@
 							$$ f^l = W^l_{{s_1}{s_2}{s_3}\dots{s_n}} x^{(1)}_{s_1} x^{(2)}_{s_2} x^{(3)}_{s_3}
 																		\dots x^{(n)}_{s_n} 
 							$$
+							Here we represent the output as one-hot vectors $[0, 0, \dots 1, \dots 0]$
 							</li>
 							<li class="fragment"> 
 							Represent $W$ by a modified MPS 
