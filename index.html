@@ -75,7 +75,7 @@
 						<p class="fragment"> Each pixel lives in its vector space (spin) <br> 
 							<img class="center" height="150" data-src="images/spin.png" alt="spins"> 
 							</p>
-						<p class="fragment"> But need $\mathcal{O}\left(2^{\left[\text{const} \times N_{pixels}\right]}\right)$ parameters! </p>
+						<p class="fragment"> But need $\mathcal{O}\left(2^{N_{\text{pixels}}}\right)$ parameters! </p>
 
 					</section>
 
@@ -107,16 +107,9 @@
 							</li>
 							<li class="fragment"> Graphical tensor notation 
 								<img class="center" height="80" data-src="images/mps.png" alt="mps">
-							</li>
-							<li class="fragment"> 
-								MPS is a way to bypass the curse of dimensionality in many body physics
+								$$ 2^{N_{\text{pixels}}}  \text{ vs. }  2N_{\text{pixels}}d^2 $$ 
 							</li>
 						</ul>
-
-						<aside class="notes">
-							- e.g. the $s_n$ could be spins and in fact we will commonly refer to the spin chain example from now on <br>
-							- MPS captures the interaction between the spins along the chain. 
-						</aside>
 					</section>
 
 					<section>
@@ -132,10 +125,6 @@
 
 							</li> 
 						</ul>
-						<aside class="notes">
-							Draw the tensor diagram on the board for an overlap between the product state and an MPS. <br> 
-							But then how do we normalise an MPS? 
-						</aside>
 					</section>
 
 					<section> 
@@ -224,7 +213,7 @@
 							$$ M_{ij} = \sum_{k} U_{ik} S_{k} V_{kj} $$ 
 							$ M \in \mathbb{R}^{m \times n}$, $U\in \mathbb{R}^{m \times m}$, 
 							$S\in \mathbb{R}^{\text{min}(m, n)}$, $V\in \mathbb{R}^{n \times n} $ </li>
-						<li class="fragment"> Index grouping 
+						<li class="fragment"> Index grouping (matricization) 
 							<img class="center" height="220" data-src="images/grouping.png" alt="grouping" > </li>
 						</ul>
 					</section>
@@ -249,12 +238,12 @@
 							<li> Fast convergence </li>
 							<li> Can capture long range correlations </li>
 							<li> Light-weight model </li>
-							<li> cost = $\mathcal{O}(d_{in}^3 m^3 d_{out} L N)$ </li>
+							<li> cost = $\mathcal{O}(d_{in}^3 m^3 d_{out} N_{\text{pixels}} N_{\text{images}})$ </li>
 							</ul> 
 						</li>
 						<li class="fragment"> Cons 
 							<ul> 
-							<li> cost = $\mathcal{O}(d_{in}^3 m^3 d_{out} L N)$ </li>
+							<li> cost = $\mathcal{O}(d_{in}^3 m^3 d_{out} N_{\text{pixels}} N_{\text{images}})$ </li>
 							<li> Tricks for conventional neural nets not applicable <br> (e.g. momentum) </li>
 							<ul> 
 						</li>
@@ -294,7 +283,7 @@
 							<tr>
 								<th>  </th>
 								<th>Init</th>
-								<th>Max matrix dimension</th>
+								<th>Max matrix dim</th>
 								<th>Accuracy</th>
 							</tr>
 						</thead>
@@ -303,7 +292,7 @@
 								<td> Lin Reg</td>
 								<td> N/A </td>
 								<td> N/A </td>
-								<td> $88\%$</td>
+								<td> $85\%$</td>
 							</tr>
 							<tr>
 								<td> 2-site DMRG </td>
@@ -313,19 +302,19 @@
 							</tr>
 							<tr> 
 								<td> 2-site DMRG </td>
-								<td> Lin Reg </td>
+								<td> Linear </td>
 								<td> 20 </td>
 								<td> $90\%$ </td> 
 							</tr>
 							<tr> 
 								<td> 2-site DMRG </td>
-								<td> Lin Reg </td>
+								<td> Linear </td>
 								<td> 60 </td>
 								<td> $96\%$</td> 
 							</tr>
 							<tr> 
-								<td> 2-site DMRG </td>
-								<td> Lin Reg </td>
+								<td> 2-site DMRG (permuted) </td>
+								<td> Linear </td>
 								<td> 50 </td>
 								<td> $96\%$</td>
 							</tr>
